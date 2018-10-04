@@ -1,0 +1,12 @@
+startup_message off
+defscrollback 10000
+### add colour to the caption...
+caption string "%{.ck} %n %t %{.gk}"
+
+
+term screen-256color
+#change the hardstatus settings to give an window list at the bottom of the                        
+#screen, with the time and date and with the current window highlighted                            
+hardstatus alwayslastline
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W}%c %{g}]'
+                                                                                                                                      

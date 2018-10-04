@@ -1,0 +1,7 @@
+[pi-media]
+192.168.1.8 ipaddress=192.168.1.8 hostname=pi-nas1
+
+#[pi-osmc]
+#192.168.1.9 ipaddress=192.168.1.10 hostname=pi-osmc1 # wireless
+#192.168.1.10 ipaddress=192.168.1.10 hostname=pi-osmc1 # wired
+

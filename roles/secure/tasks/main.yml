@@ -1,0 +1,11 @@
+- name: Install list of packages
+  apt:  pkg={{item}} state=installed
+  with_items:
+   - fail2ban
+   - ufw
+   
+- name: Allow  SSH traffic
+  ufw: rule=allow port=22 proto=tcp
+
+- name: Setup ufw default drop rule
+  ufw: state=enabled policy=deny

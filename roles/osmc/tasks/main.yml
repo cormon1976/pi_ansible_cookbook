@@ -1,0 +1,23 @@
+
+ - name: add a generic account
+   user: name=cormon update_password=always password="$6$rounds=656000$ZPnlFI9WgrfQLUOi$XIszh3F8eo6dU56PX6BcPOZu.wvVcK9CNlDZvMkx0QMzOCOdA8a5wOtoGkOpEt7Tc.V8Co/AbN/QldjYHvqer/"
+
+ - name: Change osmc default password
+   user: name=osmc password="$6$rounds=656000$HyK.nV7USa5lOvKJ$ZDWnIAxIP/0LyLzlTViLlssmNWzYH5lExrEvgXiu/TH/Rh8gettHeAfe/VRQG6MrfrZ1K3bmD1Kbpk9ZYe3cb0"
+
+ - name: Check mounted files existance
+   stat: path=/media/1Gig
+   register: st
+
+ - name: Create the new dirs in /media
+   when: st.stat.exists == False
+   shell: sudo mkdir /mnt/1Gig
+   register: mkdir_media
+   sudo: yes 
+
+
+ - name: Append a mount instruction to fstab to fstab
+   blockinfile:
+     dest: /etc/fstab
+     block: |
+       /dev/sda1 /media/1Gig auto users,noatime,umask=0 0 0

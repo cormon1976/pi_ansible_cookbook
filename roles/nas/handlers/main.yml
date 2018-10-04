@@ -1,0 +1,7 @@
+---
+
+- name: Start Samba
+  service: name=samba state=started
+
+- name: Reload Samba
+  service: name=samba state=reloaded

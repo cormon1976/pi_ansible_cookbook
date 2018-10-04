@@ -1,0 +1,74 @@
+- name: Let's update the apt cache.
+  apt: update_cache=yes
+  sudo: yes
+  
+- name: Now we need to update the Raspbian distribution.
+  apt: upgrade=yes
+  sudo: yes
+
+- name: We are setting our new hostname.
+  hostname: name={{ hostname }}
+  sudo: yes
+  
+- name: Make sure some basic tools are installed
+  apt: pkg={{ item }} state=latest
+  sudo: yes
+  with_items:
+    - unattended-upgrades
+    - git
+    - curl
+    - htop
+    - nmap
+    - tmux
+    - zsh
+    - nmon
+    - rpi-update
+    - haveged
+    - avahi-daemon 
+    - rng-tools
+    - vim
+    - ntfs-3g
+    - samba 
+    - samba-common-bin
+    - whois
+    - screen
+    - vim
+    - python-pip
+    - tcpdump      
+  register: apps_installed  
+
+- name: "Install Python packages"
+  sudo: yes
+  pip: name={{ item }}
+  with_items:
+    - virtualenv
+    - flask
+    - requests
+    - boto 
+
+- name: add a generic account
+  user: name=cormon update_password=always password="$6$rounds=656000$ZPnlFI9WgrfQLUOi$XIszh3F8eo6dU56PX6BcPOZu.wvVcK9CNlDZvMkx0QMzOCOdA8a5wOtoGkOpEt7Tc.V8Co/AbN/QldjYHvqer/"
+
+#- name: Change pi default password
+#  user: name=pi password="$6$rounds=656000$HyK.nV7USa5lOvKJ$ZDWnIAxIP/0LyLzlTViLlssmNWzYH5lExrEvgXiu/TH/Rh8gettHeAfe/VRQG6MrfrZ1K3bmD1Kbpk9ZYe3cb0"
+
+- name: Uninstall the massive wolfram-alpha engine
+  apt: pkg={{ item }} state=absent
+  sudo: yes
+  with_items:
+    - wolfram-engine
+
+- name: Copy in Resolv Config
+  copy: src=resolv.conf dest=/etc/resolv.conf owner=root group=root
+
+- name: Copy in Screenrc file
+  when: apps_installed|success
+  copy: src=.screenrc dest=/home/pi owner=pi group=pi
+
+- name: Autoremove any unused packages.
+  shell: "apt-get autoremove --assume-yes --purge"
+  sudo: yes
+
+- name: Let's Autoclean the system.
+  shell: "apt-get autoclean --assume-yes"
+  sudo: yes
